@@ -5,16 +5,9 @@
 //  Created by Maraj Hossain on 8/24/23.
 //
 
-
 /**
- Temperature conversion: users choose Celsius, Fahrenheit, or Kelvin.
- 
- 
- 
- 
-**/
-
-
+  Temperature conversion: users choose Celsius, Fahrenheit, or Kelvin.
+ **/
 
 import SwiftUI
 
@@ -22,7 +15,7 @@ import SwiftUI
 struct iConverterApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(convertedValue: "", inputValue: "", selectedInputUnit: "", selectedOutputUnit: "")
         }
     }
 }
