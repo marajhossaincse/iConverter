@@ -15,7 +15,7 @@ import SwiftUI
 struct iConverterApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(convertedValue: "", inputValue: "", selectedInputUnit: "", selectedOutputUnit: "")
+            ContentView(selectedInputUnit: "", selectedOutputUnit: "")
         }
     }
 }

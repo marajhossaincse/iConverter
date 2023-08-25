@@ -8,19 +8,33 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var temperatureUnits = ["Celcius", "Fahrenheit", "Kelvin"]
-    var convertedValue: String
+    var temperatureUnits = ["Celsius", "Fahrenheit", "Kelvin"]
+    @FocusState private var amountIsFocused: Bool
 
-    @State var inputValue: String
-    @State var selectedInputUnit: String = "Celcius"
+    @State var inputValue = 0.0
+    @State var selectedInputUnit: String
     @State var selectedOutputUnit: String
+    var convertedValue: Double {
+        if selectedInputUnit.lowercased() == "celsius" {
+            if selectedOutputUnit.lowercased() == "fahrenheit" {
+                let amount = (inputValue * (9.0 / 5.0) + 32.0)
+                return amount
+
+            } else {
+                let amount = inputValue + 273.15
+                return amount
+            }
+        }
+        return 0.0
+    }
 
     var body: some View {
         VStack {
-            TextField("How much to convert:", text: $inputValue)
+            TextField("How much to convert:", value: $inputValue, format: .number)
                 .padding()
                 .background(Color.black.opacity(0.3))
                 .cornerRadius(10)
+                .focused($amountIsFocused)
 
             HStack(spacing: 0) {
                 Picker("Choose input temperature unit",
@@ -37,23 +51,19 @@ struct ContentView: View {
                         Text(unit)
                     }
                 }
-                .pickerStyle(.inline)
                 .padding()
             }
 
-            Text("Converted value is: ")
+            Text("\(convertedValue)")
+//            Text("Converted value is: \(convertedValue)")
         }
         .padding()
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(
-            temperatureUnits: ["1", "2", "3"],
-            convertedValue: "",
-            inputValue: "",
-            selectedInputUnit: "",
-            selectedOutputUnit: "")
-    }
-}
+//
+// struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+// }
