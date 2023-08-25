@@ -14,50 +14,69 @@ struct ContentView: View {
     @State var inputValue = 0.0
     @State var selectedInputUnit: String
     @State var selectedOutputUnit: String
-    var convertedValue: Double {
+    var outputValue: Double {
+        var amount: Double = inputValue
+
         if selectedInputUnit.lowercased() == "celsius" {
             if selectedOutputUnit.lowercased() == "fahrenheit" {
-                let amount = (inputValue * (9.0 / 5.0) + 32.0)
-                return amount
+                amount = (inputValue * (9.0 / 5.0) + 32.0)
 
-            } else {
-                let amount = inputValue + 273.15
-                return amount
+            } else if selectedOutputUnit.lowercased() == "kelvin" {
+                print("out unit ", selectedOutputUnit)
+                amount = inputValue + 273.15
             }
         }
-        return 0.0
+        return amount
     }
 
     var body: some View {
-        VStack {
-            TextField("How much to convert:", value: $inputValue, format: .number)
-                .padding()
-                .background(Color.black.opacity(0.3))
-                .cornerRadius(10)
-                .focused($amountIsFocused)
-
-            HStack(spacing: 0) {
-                Picker("Choose input temperature unit",
-                       selection: $selectedInputUnit) {
-                    ForEach(temperatureUnits, id: \.self) { unit in
-                        Text(unit)
+        NavigationView {
+            Form {
+                VStack(spacing: 0) {
+                    Section {
+                        Picker("Input unit",
+                               selection: $selectedInputUnit) {
+                            ForEach(temperatureUnits, id: \.self) { unit in
+                                Text(unit)
+                            }
+                        }
+                        .padding(.vertical, 7)
                     }
-                }
-                .padding()
 
-                Picker("Choose input temperature unit",
-                       selection: $selectedOutputUnit) {
-                    ForEach(temperatureUnits, id: \.self) { unit in
-                        Text(unit)
+                    Section {
+                        TextField("", value: $inputValue, format: .number)
+                            .padding()
+                            .background(Color.black.opacity(0.3))
+                            .cornerRadius(10)
+                            .focused($amountIsFocused)
+                    } header: {
+                        Text("Input amount")
+                    }
+
+                    Section {
+                        Picker("Output unit",
+                               selection: $selectedOutputUnit) {
+                            ForEach(temperatureUnits, id: \.self) { unit in
+                                Text(unit)
+                            }
+                        }
+                        .padding(.vertical, 7)
+                    }
+
+                    Section {
+                        Text("\(outputValue)")
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.black.opacity(0.3))
+                            .cornerRadius(10)
+                    } header: {
+                        Text("Output amount: ")
                     }
                 }
                 .padding()
             }
-
-            Text("\(convertedValue)")
-//            Text("Converted value is: \(convertedValue)")
+            .navigationTitle("iConverter")
         }
-        .padding()
     }
 }
 
